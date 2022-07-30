@@ -49,8 +49,9 @@
 
         <activity
             android:name=".java.ChooserActivity"
-            android:exported="false">
+            android:exported="true">
         </activity>
+
 
         <activity
             android:name=".java.LivePreviewActivity"
@@ -89,7 +90,7 @@
 
         <activity
             android:name=".kotlin.CameraXLivePreviewActivity"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/AppTheme">
         </activity>
 

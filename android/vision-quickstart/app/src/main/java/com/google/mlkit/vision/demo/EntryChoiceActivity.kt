@@ -21,13 +21,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.demo.java.ChooserActivity
-import java.util.ArrayList
+import com.google.mlkit.vision.demo.kotlin.CameraXLivePreviewActivity
 
 class EntryChoiceActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -35,22 +37,13 @@ class EntryChoiceActivity : AppCompatActivity(), ActivityCompat.OnRequestPermiss
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_vision_entry_choice)
 
-    findViewById<TextView>(R.id.java_entry_point).setOnClickListener {
-      val intent = Intent(this@EntryChoiceActivity, ChooserActivity::class.java)
-      startActivity(intent)
-    }
-
-    findViewById<TextView>(R.id.kotlin_entry_point).setOnClickListener {
-      val intent =
-        Intent(
-          this@EntryChoiceActivity,
-          com.google.mlkit.vision.demo.kotlin.ChooserActivity::class.java
-        )
-      startActivity(intent)
-    }
-
     if (!allRuntimePermissionsGranted()) {
       getRuntimePermissions()
+    }else {
+      Handler(Looper.getMainLooper()).postDelayed({
+        val intent = Intent(this@EntryChoiceActivity, CameraXLivePreviewActivity::class.java)
+        startActivity(intent)
+      }, 3000)
     }
   }
 
@@ -92,6 +85,24 @@ class EntryChoiceActivity : AppCompatActivity(), ActivityCompat.OnRequestPermiss
     }
     Log.i(TAG, "Permission NOT granted: $permission")
     return false
+  }
+
+  override fun onRequestPermissionsResult(requestCode: Int,
+                                          permissions: Array<String>, grantResults: IntArray) {
+    Log.i(TAG, "This is the request code ${requestCode}")
+    when (requestCode) {
+      1 -> {
+        if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+          Log.i(TAG, "Permission has been denied by user")
+        } else {
+          Log.i(TAG, "Permission has been granted by user")
+          Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this@EntryChoiceActivity, CameraXLivePreviewActivity::class.java)
+            startActivity(intent)
+          }, 4000)
+        }
+      }
+    }
   }
 
   companion object {
