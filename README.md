@@ -27,4 +27,4 @@ open in Android Studio
 here.](https://developers.google.com/ml-kit/samples)
 
 ## Sample Video
-
+[Download Video Here.](https://drive.google.com/file/d/1_aHKtjPPMBKxBEYIocJTQLwwobyxSmzp/view)
